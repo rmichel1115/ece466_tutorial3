@@ -81,7 +81,7 @@ expr:
         $$ = Builder.CreateLoad(Builder.getInt32Ty(), ptr);
     }
     | expr PLUS LBRACKET expr RBRACKET {
-      Value *ptr = Builder.CreateIntToPTR($3, PointerType::get(Builder.getInt32Ty(), 0), "ptrtmp");
+      Value *ptr = Builder.CreateIntToPTR($2, PointerType::get(Builder.getInt32Ty(), 0), "ptrtmp");
       Value *loadVal = Builder.CreateLoad(Builder.getInt32Ty(), ptr, "loadtmp");
       $$ = Builder.CreateAdd($1, loadVal, "addptrtmp");
     }
