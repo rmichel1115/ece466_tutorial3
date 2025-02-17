@@ -23,7 +23,7 @@ using namespace llvm;
 [ \t\r\n]+    ; // Ignore whitespace
 
 [Rr][0-9]+    { yylval.reg = atoi(yytext+1); return REG; }
-[Aa][0-3]     { yylval.reg = atoi(yytext+1) + 8; return REG; } // Handle a0-a3
+[aA][0-9]+     { yylval.reg = atoi(yytext+1); return IMMEDIATE; } 
 "return"      { return RETURN; }
 [0-9]+        { yylval.imm = atoi(yytext); return IMMEDIATE; }
 "="           { return ASSIGN; }
