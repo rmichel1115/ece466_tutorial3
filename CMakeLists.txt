@@ -8,7 +8,7 @@ find_package(BISON)
 find_package(FLEX)
 
 find_package(LLVM REQUIRED CONFIG)
-target_link_libraries(t3 LLVM)
+
 
 list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
