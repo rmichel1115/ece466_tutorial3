@@ -13,7 +13,7 @@
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Support/FileSystem.h"
 using namespace llvm;
-#include "expr.tab.h"
+#include "expr.y.hpp"
 %}
 
 %option noyywrap
