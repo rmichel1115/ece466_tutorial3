@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <math.h>
-
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Value.h"
 #include "llvm/IR/Function.h"
@@ -13,74 +12,33 @@
 #include "llvm/Support/SystemUtils.h"
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Support/FileSystem.h"
-
 using namespace llvm;
-
-#include "expr.y.h"
-
+#include "expr.tab.h"
 %}
 
 %option noyywrap
 
-%% // begin tokens
+%% // Token definitions
 
-[ \n\t]  // ignore a space, a tab, a newline
+[ \t\r\n]+    ; // Ignore whitespace
 
-[Rr][0-9]+ {
-    yylval.reg = atoi(yytext+1);
-    return REG;
-}
+[Rr][0-9]+    { yylval.reg = atoi(yytext+1); return REG; }
+[Aa][0-3]     { yylval.reg = atoi(yytext+1) + 8; return REG; } // Handle a0-a3
+"return"      { return RETURN; }
+[0-9]+        { yylval.imm = atoi(yytext); return IMMEDIATE; }
+"="           { return ASSIGN; }
+";"           { return SEMI; }
+"("           { return LPAREN; }
+")"           { return RPAREN; }
+"["           { return LBRACKET; }
+"]"           { return RBRACKET; }
+"-"           { return MINUS; }
+"+"           { return PLUS; }
+"//".*\n      ; // Ignore comments
 
-"return" {
-    return RETURN;
-}
+.             { printf("syntax error!\n"); exit(1); }
 
-[0-9]+ {
-    yylval.imm = atoi(yytext);
-    return IMMEDIATE;
-}
-
-"=" {
-    return ASSIGN;
-}
-
-";" {
-    return SEMI;
-}
-
-"(" {
-    return LPAREN;
-}
-
-")" {
-    return RPAREN;
-}
-
-"[" {
-    return LBRACKET;
-}
-
-"]" {
-    return RBRACKET;
-}
-
-"-" {
-    return MINUS;
-}
-
-"+" {
-    return PLUS;
-}
-
-// Ignore comments
-"//".*\n
-
-. {
-    printf("syntax error!\n");
-    exit(1);
-}
-
-%% // end tokens
+%% // End of tokens
 
 int yywrap() {
     return 1;
