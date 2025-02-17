@@ -1,24 +1,86 @@
 %{
 #include <stdio.h>
-#include <stdlib.h>
-#include "expr.tab.h"
+#include <iostream>
+#include <math.h>
+
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Value.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Type.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/Bitcode/BitcodeReader.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
+#include "llvm/Support/SystemUtils.h"
+#include "llvm/Support/ToolOutputFile.h"
+#include "llvm/Support/FileSystem.h"
+
+using namespace llvm;
+
+#include "expr.y.h"
 
 %}
 
-%%
-[ \t\n]+               /* Ignore whitespace */;
-"return"               { return RETURN; }
-"R[0-7]"               { yylval.reg = atoi(yytext + 1); return REG; }
-[0-9]+                 { yylval.imm = atoi(yytext); return IMMEDIATE; }
-"+"                    { return PLUS; }
-"-"                    { return MINUS; }
-"*"                    { return MUL; }
-"/"                    { return DIV; }
-"["                    { return LBRACKET; }
-"]"                    { return RBRACKET; }
-"="                    { return ASSIGN; }
-";"                    { return SEMI; }
-%%
+%option noyywrap
+
+%% // begin tokens
+
+[ \n\t]  // ignore a space, a tab, a newline
+
+[Rr][0-9]+ {
+    yylval.reg = atoi(yytext+1);
+    return REG;
+}
+
+"return" {
+    return RETURN;
+}
+
+[0-9]+ {
+    yylval.imm = atoi(yytext);
+    return IMMEDIATE;
+}
+
+"=" {
+    return ASSIGN;
+}
+
+";" {
+    return SEMI;
+}
+
+"(" {
+    return LPAREN;
+}
+
+")" {
+    return RPAREN;
+}
+
+"[" {
+    return LBRACKET;
+}
+
+"]" {
+    return RBRACKET;
+}
+
+"-" {
+    return MINUS;
+}
+
+"+" {
+    return PLUS;
+}
+
+// Ignore comments
+"//".*\n
+
+. {
+    printf("syntax error!\n");
+    exit(1);
+}
+
+%% // end tokens
 
 int yywrap() {
     return 1;
