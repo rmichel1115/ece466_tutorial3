@@ -40,6 +40,6 @@ using namespace llvm;
 
 %% // End of tokens
 
-int yywrap(void) {
-    return 1;
-}
+//int yywrap(void) {
+    //return 1;
+//}
