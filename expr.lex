@@ -14,18 +14,6 @@
 #include "llvm/Support/FileSystem.h"
 using namespace llvm;
 #include "expr.y.hpp"
-
-std::map<std::string, llvm::Value*> regs;
-
-// Helper function to get the Value for a register
-llvm::Value* getRegValue(const std::string& regName) {
-    if (regs.find(regName) != regs.end()) {
-        return regs[regName];
-    }
-    std::cerr << "Error: Register " << regName << " not found." << std::endl;
-    return nullptr;
-}
-
 %}
 
 %option noyywrap
@@ -34,8 +22,8 @@ llvm::Value* getRegValue(const std::string& regName) {
 
 [ \t\r\n]+    ; // Ignore whitespace
 
-"[Rr][0-9]+"    { yylval.reg = new Value(*getRegValue(yytext)); return REG; }
-[a-zA-Z][0-9]+     { yylval.reg = new Value(*getRegValue(yytext)); return REG; } 
+[Rr][0-9]+    { yylval.reg = atoi(yytext+1); return REG; }
+[aA][0-9]+     { yylval.reg = atoi(yytext+1); return IMMEDIATE; } 
 "return"      { return RETURN; }
 [0-9]+        { yylval.imm = atoi(yytext); return IMMEDIATE; }
 "="           { return ASSIGN; }
@@ -55,4 +43,3 @@ llvm::Value* getRegValue(const std::string& regName) {
 //int yywrap(void) {
     //return 1;
 //}
-
