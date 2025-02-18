@@ -14,6 +14,18 @@
 #include "llvm/Support/FileSystem.h"
 using namespace llvm;
 #include "expr.y.hpp"
+
+std::map<std::string, llvm::Value*> regs;
+
+// Helper function to get the Value for a register
+llvm::Value* getRegValue(const std::string& regName) {
+    if (regs.find(regName) != regs.end()) {
+        return regs[regName];
+    }
+    std::cerr << "Error: Register " << regName << " not found." << std::endl;
+    return nullptr;
+}
+
 %}
 
 %option noyywrap
