@@ -1,3 +1,10 @@
+
+// Just wanted to note that I used AI for the following: Value pointer confirmation, supporting the necessary register values, LBRACKET/RBRACKET pointer, along with how the "Builder.'s" worked. 
+// I was able to deepen my understanding of the correlation between expr.y and expr.lex and how they are able to produce effective grammar. 
+// I was unable to pass three of the tests regarding the mixed operations and order or operations. 
+// Additionally, my answers to the documet questions are attached on this git.
+
+
 %{
 #include <cstdio>
 #include <list>
