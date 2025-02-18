@@ -22,7 +22,7 @@ BISON_TARGET(Parser expr.y ${CMAKE_CURRENT_BINARY_DIR}/expr.y.cpp)
 FLEX_TARGET(Scanner expr.lex ${CMAKE_CURRENT_BINARY_DIR}/expr.lex.cpp)
 ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")  //AI was used to edit to "-fno-exceptions". Was unable to pass any tests without it on Terminal
 
 include_directories(.)
 
