@@ -67,6 +67,12 @@ expr:
     | expr PLUS expr {
         $$ = Builder.CreateAdd($1, $3, "addtmp");
     }
+    | expr PLUS IMMEDIATE {
+        $$ = Builder.CreateAdd($1, Builder.getInt($3), "addtmp");
+    }
+    | expr MINUS IMMEDIATE {
+        $$ = Builder.CreateSub($1, Builder.getInt32($3), "subtmp");
+    }
     | expr MINUS expr {
         $$ = Builder.CreateSub($1, $3, "subtmp");
     }
