@@ -1,3 +1,6 @@
+
+// Just wanted to make note that I specifically used AI to help with some of the token definitions. I was able to understand why some of my register inputs were incorrect (example: why R1 would work and r1 would not). expr.lex remained very similar to the one I constructed in Tutorial 2.
+
 %{
 #include <stdio.h>
 #include <iostream>
