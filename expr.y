@@ -77,14 +77,16 @@ expr:
         $$ = $2; // Parentheses just return the enclosed expression
     }
     | LBRACKET expr RBRACKET {
-        Value *ptr = Builder.CreateIntToPtr($2, PointerType::get(Builder.getInt32Ty(), 0), "ptrtmp");
-        $$ = Builder.CreateLoad(Builder.getInt32Ty(), ptr);
+      if ($2->getType()->isIntegerTy()) {
+          Value *ptr = Builder.CreateIntToPtr($2, PointerType::get(Builder.getInt32Ty(), 0));
+          $$ = Builder.CreateLoad(Builder.getInt32Ty(), ptr);
+      } else {
+        yyerror("Expected integer for pointer");
+      }
+        //Value *ptr = Builder.CreateIntToPtr($2, PointerType::get(Builder.getInt32Ty(), 0), "ptrtmp");
+       //$$ = Builder.CreateLoad(Builder.getInt32Ty(), ptr);
     }
-    | expr PLUS LBRACKET expr RBRACKET {
-      Value *ptr = Builder.CreateIntToPTR($2, PointerType::get(Builder.getInt32Ty(), 0), "ptrtmp");
-      Value *loadVal = Builder.CreateLoad(Builder.getInt32Ty(), ptr, "loadtmp");
-      $$ = Builder.CreateAdd($1, loadVal, "addptrtmp");
-    }
+    
 ;
 
 %%
